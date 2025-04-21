@@ -23,7 +23,7 @@ if(isset($_POST['submit'])) {
       ':body' => $body,
       ':username' => $username,
      ]);
-
+     header("location: index.php");
   }
 }
 
