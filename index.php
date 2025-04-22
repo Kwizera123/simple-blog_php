@@ -14,9 +14,9 @@
     <div class="card-header"><?php echo $row->username; ?>'post</div>
       <div class="card-body">
         <h5 class="card-title text text-primary"><?php echo $row->title; ?></h5>
-        <p class="card-text"><?php echo substr($row->body, 0, 200); ?>...</p>
+        <p class="card-text"><?php echo substr($row->body, 0, 200) .'..'; ?></p>
         <p class="card-text"><small class="text-body-secondary"><?php echo $row->created_at; ?></small></p>
-        <a href="show.php?id=<?php echo $row->id; ?>" class="btn btn-primary">Read more</a>
+        <a href="show.php?id=<?php echo $row->id; ?>" class="btn btn-secondary">Read more</a>
       </div>
     </div>
     <br>
