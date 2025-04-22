@@ -1,7 +1,13 @@
-
-<?php require "config.php"; ?>
 <?php require "includes/header.php"; ?>
+<?php require "config.php"; ?>
+
 <?php 
+
+if(!isset($_SESSION['username'])) {
+  header("location: login.php");
+}
+
+
   if(isset($_GET['id'])) {
     $id = $_GET['id'];
 
@@ -10,16 +16,22 @@
 
     $posts = $onePost->fetch(PDO::FETCH_OBJ);
   }
+
+      $comments = $conn->query("SELECT * FROM comments WHERE post_id='$id'");
+      $comments->execute();
+
+      $comment = $comments->fetchAll(PDO::FETCH_OBJ);
+
 ?>
 
-  <div class="card mt-3">
-    <div class="card-header">Writen by <?php echo $posts->username; ?></div>
-      <div class="card-body">
-        <h5 class="card-title text text-primary"><?php echo $posts->title; ?></h5>
-        <p class="card-text"><?php echo $posts->body; ?></p>
-        <p class="card-text"><small class="text-body-secondary"><?php echo $posts->created_at; ?></small></p>
-        
-      </div>
+    <div class="card mt-3">
+      <div class="card-header">Writen by <?php echo $posts->username; ?></div>
+        <div class="card-body">
+          <h5 class="card-title text text-primary"><?php echo $posts->title; ?></h5>
+          <p class="card-text"><?php echo $posts->body; ?></p>
+          <p class="card-text"><small class="text-body-secondary"><?php echo $posts->created_at; ?></small></p>
+          
+        </div>
     </div>
 
 
@@ -43,9 +55,21 @@
     </div>
 
     <button name="submit" id="submit" class="w-15 btn btn-lg  btn-primary mt-3" type="submit">Create Comment</button>
-
+    <div id="msg" class="nothing col-3"></div>
   </form>
 
+  <!-- Comments -->
+  <?php foreach($comment as $singleComment) : ?>
+      <div class="card mt-3">
+          <div class="card-header">Writen by <?php echo $singleComment->username; ?></div>
+            <div class="card-body">
+              <h5 class="card-title text text-success"><?php echo $singleComment->username; ?></h5>
+              <p class="card-text"><?php echo $singleComment->comment; ?></p>
+               <p class="card-text"><small class="text-body-secondary"><?php echo $singleComment->created_at; ?></small></p>
+            </div>
+            
+        </div>
+        <?php endforeach; ?>
 
   <?php require "includes/footer.php"; ?>
 
@@ -64,7 +88,11 @@
 
             success:function() {
               //alert('success');
-              $("#comment").text('');
+              $("#comment").val(null);
+              $("#username").val(null);
+              $("#post_id").val(null);
+
+              $("#msg").html("Your Comment Added successfully").toggleClass("alert alert-success bg-success text-white mt-3");
             }
           })
        })
