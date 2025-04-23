@@ -67,8 +67,10 @@ if(!isset($_SESSION['username'])) {
             <div class="card-body">
               <h5 class="card-title text text-success"><?php echo $singleComment->username; ?></h5>
               <p class="card-text"><?php echo $singleComment->comment; ?></p>
-               <p class="card-text"><small class="text-body-secondary"><?php echo $singleComment->created_at; ?></small></p>
+              <?php if(isset($_SESSION['username']) AND $_SESSION['username'] == $singleComment->username) : ?>
                <button id="delete-btn" value="<?php echo $singleComment->id; ?>" class="btn btn-danger mt-3">Delete Comment</button>
+               <?php endif; ?>
+               <p class="card-text"><small class="text-body-secondary"><?php echo $singleComment->created_at; ?></small></p>
             </div>
             
         </div>
