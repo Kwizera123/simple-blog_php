@@ -56,6 +56,8 @@ if(!isset($_SESSION['username'])) {
 
     <button name="submit" id="submit" class="w-15 btn btn-lg  btn-primary mt-3" type="submit">Create Comment</button>
     <div id="msg" class="nothing col-3"></div>
+    <div id="delete-msg" class="nothing"></div>
+
   </form>
 
   <!-- Comments -->
@@ -66,6 +68,7 @@ if(!isset($_SESSION['username'])) {
               <h5 class="card-title text text-success"><?php echo $singleComment->username; ?></h5>
               <p class="card-text"><?php echo $singleComment->comment; ?></p>
                <p class="card-text"><small class="text-body-secondary"><?php echo $singleComment->created_at; ?></small></p>
+               <button id="delete-btn" value="<?php echo $singleComment->id; ?>" class="btn btn-danger mt-3">Delete Comment</button>
             </div>
             
         </div>
@@ -93,8 +96,44 @@ if(!isset($_SESSION['username'])) {
               $("#post_id").val(null);
 
               $("#msg").html("Your Comment Added successfully").toggleClass("alert alert-success bg-success text-white mt-3");
+              fetch();
             }
-          })
-       })
+          });
+       });
+
+// for Delete comment
+
+  $("#delete-btn").on('click', function(e) {
+        e.preventDefault();
+          //alert('Form submitted');
+          var id = $(this).val();
+
+          $.ajax({
+            type: 'post',
+            url: 'delete-comment.php',
+            data: {
+              delete: 'delete',
+              id: id
+            },
+
+            success:function() {
+             // alert(id);
+
+             $("#delete-msg").html("Your Comment deleted successfully").toggleClass("alert alert-danger bg-danger text-white mt-3");
+             fetch();
+            }
+          });
+       });
+
+
+
+
+
+
+       function fetch(){
+        setInterval(function () {
+          $("body").load("show.php?id=<?php echo $_GET['id']; ?>")
+        }, 5000);
+       }
   });
  </script>
